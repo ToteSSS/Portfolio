@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tote – 3D Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#e4e7e6; --ink:#1f2322; --mute:#5a6360; --accent:#1f7a62; --line:#c3c9c7; --tile:#3e3e3e; --chip:#d5dad8;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){--bg:#2c2d2d; --ink:#eceeed; --mute:#a3abA8; --accent:#8fe3c8; --line:#454847; --tile:#3e3e3e; --chip:#383a3a; color-scheme:dark}
+}
+:root[data-theme="dark"]{--bg:#2c2d2d; --ink:#eceeed; --mute:#a3abA8; --accent:#8fe3c8; --line:#454847; --tile:#3e3e3e; --chip:#383a3a; color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Bricolage Grotesque",system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.5}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 clamp(16px,4vw,40px)}
+header{padding:clamp(40px,8vw,88px) 0 28px}
+h1{font-size:clamp(3rem,11vw,7.5rem);line-height:.9;font-weight:800;letter-spacing:-.04em;margin:0}
+.tag{max-width:46ch;margin:18px 0 0;color:var(--mute);font-size:1.1rem}
+.tag.sub{max-width:62ch;margin-top:10px;font-size:.95rem}
+.links{display:flex;gap:16px;flex-wrap:wrap;margin-top:14px}
+.links a{color:var(--ink);text-underline-offset:4px}
+.filters{display:flex;gap:8px;flex-wrap:wrap;padding:14px 0 22px;border-bottom:1px solid var(--line)}
+.filters button{background:var(--chip);border:1px solid transparent;border-radius:999px;padding:7px 16px;font-weight:600}
+.filters button[aria-pressed="true"]{background:var(--c,var(--accent));color:#14201c}
+.filters button[data-s]::before{content:"";display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--c);margin-right:8px}
+.filters button[data-s][aria-pressed="true"]::before{background:#14201c}
+.filters small{opacity:.7;margin-left:6px;font-weight:400}
+.grid{position:relative;margin:26px 0 60px}
+.card{position:absolute;background:none;border:0;padding:0;display:block;text-align:left;color:#fff}
+.shape{position:absolute;inset:0;background:var(--tile)}
+.shape::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.6),transparent 42%);background:linear-gradient(to top,color-mix(in srgb,var(--c) 32%,rgba(0,0,0,.72)),transparent 48%);pointer-events:none}
+.shape img,.shape video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transition:opacity .25s}
+.shape .b{opacity:0}
+.card:hover .shape .b,.card:focus-visible .shape .b{opacity:1}
+.card.has-b:hover .shape .a,.card.has-b:focus-visible .shape .a{opacity:0}
+.cap{position:absolute;left:0;bottom:0;display:flex;flex-direction:column;gap:1px;z-index:1;text-shadow:0 1px 6px rgba(0,0,0,.6)}
+.cap strong{font-size:1.25rem;font-weight:600;line-height:1.15}
+.cap span{font-size:.85rem;font-weight:600;color:var(--c)}
+#bg{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.3}
+.wrap{position:relative;z-index:1}
+.card.fill .shape img,.card.fill .shape video{object-fit:cover}
+.shape .cyc{opacity:0;transition:opacity .9s}.shape .cyc.on{opacity:1}
+.ctl{padding:10px 22px 0}.ctl:has(.pp[hidden]){display:none}
+.pp{background:var(--chip);border:0;border-radius:999px;padding:6px 14px;font-weight:600}
+.pp[hidden]{display:none}
+.soon{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:0 12%;background:repeating-linear-gradient(135deg,transparent 0 14px,rgba(255,255,255,.05) 14px 15px)}
+.soon span{font-size:clamp(1.8rem,4vw,2.6rem);font-weight:800;letter-spacing:-.03em;line-height:1;text-align:center;color:var(--c)}
+.contact{padding:6px 22px 24px;display:grid;gap:10px}
+.contact[hidden]{display:none}
+.crow{display:flex;gap:16px;align-items:baseline;border-top:1px solid var(--line);padding-top:10px}
+.crow span{min-width:110px;color:var(--mute);font-size:.9rem}
+.crow a,.crow strong{color:var(--ink);font-weight:600;text-underline-offset:4px;word-break:break-word}
+.soonnote{color:var(--mute);margin:0}
+.empty{color:var(--mute);padding:40px 0}
+footer{border-top:1px solid var(--line);padding:22px 0 40px;color:var(--mute);font-size:.9rem}
+dialog{border:0;padding:0;background:var(--bg);color:var(--ink);width:min(1120px,96vw);max-height:94vh;border-radius:8px;overflow:auto}
+dialog::backdrop{background:rgba(0,0,0,.72)}
+.dh{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding:20px 22px 12px}
+.dh h2{margin:0;font-size:1.8rem;line-height:1.1;font-weight:800;letter-spacing:-.02em}
+.dh p{margin:6px 0 0;color:var(--mute);max-width:60ch}
+dialog{border-top:4px solid var(--c,var(--accent))}
+.dlink{display:inline-block;margin-top:8px;color:var(--ink);font-weight:600;text-underline-offset:4px}
+.dlink[hidden]{display:none}
+.kind{display:inline-block;margin:0 0 8px;font-size:.85rem;font-weight:600;color:#14201c;background:var(--c,var(--accent));border-radius:999px;padding:1px 12px}
+.x{background:var(--chip);border:0;border-radius:999px;width:40px;height:40px;font-size:1.3rem;flex:none}
+.stage{margin:0 22px;background:var(--tile);border-radius:6px;height:min(68vh,680px)}
+.stage img,.stage video{display:block;width:100%;height:100%;object-fit:contain}
+.thumbs{display:flex;gap:10px;flex-wrap:wrap;padding:14px 22px 22px}
+.thumbs button{background:none;border:2px solid transparent;border-radius:6px;padding:0;width:104px;text-align:left}
+.thumbs button[aria-current="true"]{border-color:var(--c,var(--accent))}
+.thumbs img,.thumbs video{display:block;width:100%;aspect-ratio:4/3;object-fit:contain;background:var(--tile);border-radius:4px}
+.thumbs span{display:block;font-size:.78rem;color:var(--mute);padding:3px 2px}
+@media (max-width:620px){.card.feature{grid-column:auto;grid-row:auto}.dh{padding:16px 16px 10px}.stage{margin:0 16px;height:50vh}.thumbs{padding:12px 16px 18px}}
+@media (prefers-reduced-motion:reduce){.tile img{transition:none}}
+</style>
+</head>
+<body>
+<canvas id="bg" aria-hidden="true"></canvas>
+<div class="wrap">
+  <header>
+    <h1 id="siteName"></h1>
+    <p class="tag" id="siteTag"></p>
+    <p class="tag sub" id="siteIntro"></p>
+    <div class="links" id="siteLinks"></div>
+  </header>
+  <nav class="filters" id="filters" aria-label="Filter by style"></nav>
+  <main class="grid" id="grid"></main>
+  <footer id="foot"></footer>
+</div>
+<dialog id="dlg" aria-labelledby="dTitle">
+  <div class="dh"><div><span class="kind" id="dKind"></span><h2 id="dTitle"></h2><p id="dDesc"></p><a class="dlink" id="dLink" target="_blank" rel="noopener" hidden></a></div><button class="x" id="dClose" aria-label="Close">×</button></div>
+  <div class="stage" id="dStage"></div>
+  <div class="contact" id="dContact" hidden></div>
+  <div class="ctl"><button class="pp" id="dPP" hidden>Pause slideshow</button></div>
+  <div class="thumbs" id="dThumbs"></div>
+</dialog>
+
+<script>
+/* ============ SETTINGS: edit this ============ */
+/* MEDIA: every view points to a file with f:"name.ext", looked up in the media/ folder (MEDIA_DIR).
+   Images, GIF/WebP and videos (.mp4, .webm, .mov) all work. To use a better version of something,
+   drop the new file into media/ and change its file name here (or paste a full https:// link).
+   Videos play muted and looped on the cards, and with sound controls once expanded. */
+const MEDIA_DIR = "media/";
+const SITE = {
+  name: "Mateo Serra",
+  tagline: "I model, retopologize, UV and animate. Everything here is my own work.",
+  intro: "Hi! I’m a 3D Modeler and animator, I also do my own UVs and Topology, tho I’m not a fan of it, here’s all my work that I like to show, if you want to see more stuff that didn’t get here, hit me up!",
+  intro: "Currently looking for a job or proyect to work on!",
+  links: [ {label:"Wishlist RECursion on Steam", url:"https://store.steampowered.com/app/4196560/RECursion/"} /* more links: {label:"ArtStation", url:"https://..."}, {label:"Sketchfab", url:"https://..."} */ ],
+  footer: "© 2026 Tote"
+};
+/* Styles: the order sets the order of the filters */
+const STYLES = ["Characters", "Weapons", "Props", "FPAnimations", "Realistic", "Motion"];
+/* One soft color per style (captions, filters and the expanded view) */
+const STYLE_COLORS = { Characters:"#e9a8c9", Weapons:"#e98a7a", Props:"#8fe3c8", FPAnimations:"#b9a3f0", Realistic:"#f2b366", Motion:"#7cc4f2" };
+/* Each piece: media = list of views (f = file name, label = title, desc = optional text for that view only).
+   hover = index of the view shown on mouse-over · cycle = indexes that rotate on the card by themselves
+   autoplay = slideshow in the expanded view · fit:"cover" = fill the card with the image */
+const D_NET = "Hand net with idle and grab animations, using the same hands as the Shotgun.";
+const D_SLING = "Low-poly slingshot.";
+const D_BASKET = "Woven picnic basket with grab and walk animations.";
+const PIECES = [
+  { id:"eir", name:"Eir", style:"Characters", feature:true, hover:2,
+    desc:"A full character built end to end: model, retopology, UVs, rig and animations. I did the rig and retopology myself, though rigging isn’t something I want to specialize in.",
+    media:[ {f:"Eir.webp", label:"Render"}, {f:"EirRig.jpg", label:"Rig"}, {f:"EirTopo.webp", label:"Topology"}, {f:"SpearTopo.webp", label:"Spear topology"},
+            {f:"Eir_Intro_Cutscene.gif", label:"Intro cutscene"}, {f:"EirWalk.gif", label:"Walk"},
+            {f:"Eir_IN.gif", label:"Entrance"}, {f:"Eir_Out.gif", label:"Exit"}, {f:"Eir_Heavy_Shot.gif", label:"Heavy shot"}, {f:"Eir_Idles.gif", label:"Idle Poses"} ] },
+  { id:"devil", name:"Devil", style:"Characters", hover:1,
+    desc:"Low-poly character made in about two hours for a game jam.",
+    media:[ {f:"DevilContractor.jpg", label:"Model"}, {f:"DevilWireframe.jpg", label:"Wireframe"} ] },
+  { id:"guns", name:"Guns", style:"Weapons", cycle:[0,5],
+    desc:"A pump-action shotgun with first-person animations, and an older pistol model.",
+    media:[ {f:"ShotgunModel.jpg", label:"Shotgun: Model", desc:"Pump-action shotgun with first-person animations: idle, shot and reload."},
+            {f:"ShotgunWireframe.jpg", label:"Shotgun: Wireframe", desc:"Pump-action shotgun with first-person animations: idle, shot and reload."},
+            {f:"IdleSG.mp4", label:"Shotgun: Idle", desc:"Pump-action shotgun with first-person animations: idle, shot and reload."},
+            {f:"ShotSG.mp4", label:"Shotgun: Shot", desc:"Pump-action shotgun with first-person animations: idle, shot and reload."},
+            {f:"ReloadSG.mp4", label:"Shotgun: Reload", desc:"Pump-action shotgun with first-person animations: idle, shot and reload."},
+            {f:"Pistol.webp", label:"Pistol", desc:"An older model, but it shows how much my modeling has improved in a year."} ] },
+  { id:"tools", name:"Tools", style:"Props", cycle:[0,4,6], autoplay:true,
+    desc:"A net, a slingshot and a picnic basket.",
+    media:[ {f:"Net.jpg", label:"Net: Model", desc:D_NET}, {f:"NetWireframe.jpg", label:"Net: Wireframe", desc:D_NET},
+            {f:"NetIdle.gif", label:"Net: Idle", desc:D_NET}, {f:"NetGrab.gif", label:"Net: Grab", desc:D_NET},
+            {f:"SlingshotModel.jpg", label:"Slingshot: Model", desc:D_SLING}, {f:"SlingShotWireframe.jpg", label:"Slingshot: Wireframe", desc:D_SLING},
+            {f:"BasketModel.jpg", label:"Basket: Model", desc:D_BASKET}, {f:"BasketWireframe.jpg", label:"Basket: Wireframe", desc:D_BASKET},
+            {f:"BasketGrab.gif", label:"Basket: Grab", desc:D_BASKET}, {f:"BasketIdle-Walk.gif", label:"Basket: Idle and walk", desc:D_BASKET} ] },
+  { id:"hands", name:"Hands", style:"FPAnimations",
+    desc:"Hands for a low-poly game in progress that calls for expressive, creative animation. The same hands are used in the Shotgun and the Net.",
+    media:[ {f:"HandKnifeIdle.gif", label:"Knife idle"}, {f:"HandsThrowingKnife.gif", label:"Throwing a knife"},
+            {f:"Hands Attracting Knife.gif", label:"Pulling the knife back"}, {f:"WatermelonGrab.gif", label:"Watermelon grab"} ] },
+  { id:"whisky", name:"Render", style:"Realistic", fit:"cover", hover:1,
+    desc:"A realistic product scene with careful lighting. I also build realistic scenes with good lighting.",
+    media:[ {f:"Whisky1.webp", label:"Hero shot"}, {f:"Whisky2.webp", label:"Lineup"}, {f:"Whisky3.webp", label:"On the pillow"},
+            {f:"Whisky4.webp", label:"Top view"}, {f:"Whisky5.webp", label:"Label close-up"},
+            {f:"WhiskySetup.webp", label:"Scene setup", desc:"The scene in the Blender viewport: bottle, fabric and camera."} ] },
+  { id:"product-ad", name:"Product ad", style:"Motion",
+    desc:"Animation for product advertising, featuring a backlit keyboard.",
+    media:[ {f:"AD.mp4", label:"Keyboard ad"} ] },
+  { id:"youtuber-intro", name:"YouTuber intro", style:"Motion",
+    desc:"Intro animation I made for a YouTuber.",
+    media:[ {f:"Jelly.mp4", label:"Intro"} ] },
+  { id:"transitions", name:"Transitions", style:"Motion",
+    desc:"Three transitions from older projects. They show where I was then; my control of animation is much better today.",
+    media:[ {f:"Chips.mp4", label:"Dice and chips"}, {f:"Final.mp4", label:"Grenade"}, {f:"Tire.mp4", label:"OBS overlay"} ] },
+  { id:"bulleye", name:"BullEye", style:"Motion",
+    desc:"BullEye is one of the creatures from RECursion, the horror puzzle game my team is making. I didn’t model it, but I made it move: walk, run, stun and a jump scare. I also made the game’s trailer, so go wishlist it on Steam!",
+    link:{label:"RECursion on Steam", url:"https://store.steampowered.com/app/4196560/RECursion/"},
+    media:[ {f:"BullEyeRunning.gif", label:"Running"}, {f:"BullEyeWalking.gif", label:"Walking"}, {f:"BullEyeStun.gif", label:"Stun"}, {f:"BullEyeJumpScare.gif", label:"Jump scare"} ] },
+  { id:"menu", name:"Main menu prototype", style:"Motion",
+    desc:"Main menu prototype for a different game. Every click the player can make shows up in the animation, including the arrows and the volume or direction wheel.",
+    media:[ {f:"Menuprot.gif", label:"Prototype"} ] }
+];
+/* LAST TILE ("Coming soon!"): clicking it opens your details. Fill in the values you want to show.
+   Empty values stay hidden. Add url:"https://..." or url:"mailto:you@mail.com" to turn a row into a link. */
+const COMING_SOON = {
+  title: "Coming soon!",
+  text: "More work is on the way. Meanwhile, here is how to reach me:",
+  contact: [
+    {label:"Location",   value:"Argentina"},
+    {label:"Name",       value:"Mateo Serra"},
+    {label:"Email",      value:"toteserra100@gmail.com", url:"https://mail.google.com/mail/u/0/#inbox?compose=GFrJzlCWpbClFFngZdLVcPDrWdVVjWrPdjBKbRZqCxsPbPRnQtJLzpSZVjzxlfKXBgKk"},
+    {label:"ArtStation", value:"", url:""},
+    {label:"LinkedIn",   value:"Mateo Serra (Pretty empty)", url:"https://www.linkedin.com/feed/"},
+    {label:"Instagram",  value:"@tote.serra", url:"https://www.instagram.com/tote.serra/"},
+    {label:"Cellphone",  value:"+11 2517 3189", url:""},
+    {label:"Other",      value:"", url:""}
+  ]
+};
+/* ============ end of settings ============ */
+</script>
+
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  const isVid=f=>/\.(mp4|webm|mov|m4v|ogv)([?#]|$)/i.test(f);
+  const url=f=>(typeof IMG!=="undefined"&&IMG[f])||(/^(https?:|data:|\/)/.test(f)?f:MEDIA_DIR+f);
+  function tag(f,cls,alt,mode){
+    const s=url(f);
+    if(isVid(f)){
+      if(mode==="stage") return '<video class="'+cls+'" src="'+s+'" controls autoplay loop playsinline></video>';
+      if(mode==="thumb") return '<video class="'+cls+'" src="'+s+'#t=0.1" muted preload="metadata" playsinline></video>';
+      return '<video class="'+cls+'" src="'+s+'" muted autoplay loop playsinline></video>';
+    }
+    return '<img class="'+cls+'" alt="'+alt+'" src="'+s+'">';
+  }
+  const colorOf=s=>STYLE_COLORS[s]||"";
+  let current="All", lastW=0, timers=[], auto=null, curIdx=0, curP=null;
+  const still=matchMedia("(prefers-reduced-motion: reduce)").matches;
+  $("siteName").textContent=SITE.name;
+  $("siteTag").textContent=SITE.tagline; $("siteIntro").textContent=SITE.intro||"";
+  $("foot").textContent=SITE.footer;
+  SITE.links.forEach(l=>{const a=document.createElement("a");a.href=l.url;a.textContent=l.label;a.target="_blank";a.rel="noopener";$("siteLinks").appendChild(a)});
+
+  function renderFilters(){
+    const f=$("filters"); f.innerHTML="";
+    ["All",...STYLES].forEach(s=>{
+      const n=s==="All"?PIECES.length:PIECES.filter(p=>p.style===s).length;
+      if(!n) return;
+      const b=document.createElement("button");
+      b.setAttribute("aria-pressed",String(s===current));
+      if(s!=="All"){b.dataset.s=s;b.style.setProperty("--c",colorOf(s))}
+      b.innerHTML=s+"<small>"+n+"</small>";
+      b.onclick=()=>{current=s;renderFilters();renderGrid()};
+      f.appendChild(b);
+    });
+  }
+  /* Mosaic layout: tiles are polygons built from a shared, jittered lattice, so neighbours fit together. */
+  function hash(a,b){let h=Math.imul(a*374761393+b*668265263+1013,1274126177);h^=h>>>13;h=Math.imul(h,1103515245);h^=h>>>16;return((h>>>0)%1000)/1000}
+  function layout(list,W){
+    const cols=Math.max(1,Math.min(4,Math.floor(W/260)));
+    const cw=W/cols, ch=cw*0.82, J=Math.min(cw,ch)*0.13, GAP=5;
+    const occ=[];
+    const spot=(sw,sh)=>{for(let r=0;;r++)for(let c=0;c<=cols-sw;c++){let ok=true;for(let i=0;i<sh&&ok;i++)for(let j=0;j<sw;j++)if(occ[r+i]&&occ[r+i][c+j]){ok=false;break}if(ok)return{r,c}}};
+    const slots=list.map(p=>{
+      const s=(p.feature&&cols>=2)?2:1, {r,c}=spot(s,s);
+      for(let i=0;i<s;i++){occ[r+i]=occ[r+i]||[];for(let j=0;j<s;j++)occ[r+i][c+j]=1}
+      return{r,c,s};
+    });
+    const rows=Math.max(...slots.map(o=>o.r+o.s));
+    const vx=(i,j)=>{
+      let x=i*cw,y=j*ch;
+      if(i!==0&&i!==cols)x+=(hash(i,j)-.5)*2*J;
+      if(j!==0&&j!==rows)y+=(hash(j+31,i+17)-.5)*2*J;
+      return[x,y];
+    };
+    const tiles=slots.map(({r,c,s})=>{
+      const pts=[];
+      for(let i=c;i<=c+s;i++)pts.push(vx(i,r));
+      for(let j=r+1;j<=r+s;j++)pts.push(vx(c+s,j));
+      for(let i=c+s-1;i>=c;i--)pts.push(vx(i,r+s));
+      for(let j=r+s-1;j>r;j--)pts.push(vx(c,j));
+      const nT=s+1,nR=s,nB=s;
+      const xs=pts.map(p=>p[0]),ys=pts.map(p=>p[1]);
+      const x0=Math.min(...xs),y0=Math.min(...ys),x1=Math.max(...xs),y1=Math.max(...ys);
+      const mx=pts.reduce((a,p)=>a+p[0],0)/pts.length,my=pts.reduce((a,p)=>a+p[1],0)/pts.length;
+      const poly=pts.map(([x,y])=>{
+        const dx=mx-x,dy=my-y,d=Math.hypot(dx,dy)||1;
+        return[Math.round((x+dx/d*GAP*1.4-x0)*10)/10,Math.round((y+dy/d*GAP*1.4-y0)*10)/10];
+      });
+      /* Safe area for the caption: the largest left/right/bottom insets of the polygon edges */
+      const w=x1-x0,h=y1-y0;
+      const eL=[poly[0],...poly.slice(nT+nR+nB-1)], eR=poly.slice(nT-1,nT+nR), eB=poly.slice(nT+nR-1,nT+nR+nB);
+      const padL=Math.max(...eL.map(p=>p[0])), padR=w-Math.min(...eR.map(p=>p[0])), padB=h-Math.min(...eB.map(p=>p[1]));
+      return{x:x0,y:y0,w,h,padL,padR,padB,clip:"polygon("+poly.map(p=>p[0]+"px "+p[1]+"px").join(",")+")"};
+    });
+    return{tiles,height:rows*ch};
+  }
+  function renderGrid(){
+    const g=$("grid"); g.innerHTML=""; timers.forEach(clearInterval); timers=[];
+    const list=PIECES.filter(p=>current==="All"||p.style===current);
+    if(current==="All"&&typeof COMING_SOON!=="undefined") list.push({soon:true,name:COMING_SOON.title||"Coming soon!",style:""});
+    if(!list.length){g.style.height="auto";g.innerHTML='<p class="empty">Nothing in this style yet.</p>';return}
+    const W=g.clientWidth||320, L=layout(list,W);
+    g.style.height=L.height+"px"; lastW=W;
+    list.forEach((p,i)=>{
+      const t=L.tiles[i], c=document.createElement("button");
+      c.className="card"+(p.hover&&!p.cycle?" has-b":"")+(p.fit==="cover"?" fill":"");
+      c.style.cssText="--c:"+(colorOf(p.style)||"var(--accent)")+";left:"+t.x+"px;top:"+t.y+"px;width:"+t.w+"px;height:"+t.h+"px";
+      const hov=p.hover&&!p.cycle?tag(p.media[p.hover].f,"b","","card"):"";
+      const media=p.soon?'<div class="soon"><span>'+p.name+'</span></div>':p.cycle?p.cycle.map((mi,j)=>tag(p.media[mi].f,"cyc"+(j?"":" on"),"","card")).join(""):tag(p.media[0].f,"a",p.name,"card")+hov;
+      c.innerHTML='<div class="shape" style="clip-path:'+t.clip+'">'+media+'</div><div class="cap" style="left:'+(t.padL+12)+'px;bottom:'+(t.padB+10)+'px;max-width:'+Math.max(80,t.w-t.padL-t.padR-24)+'px"><strong>'+(p.soon?"Say hi":p.name)+'</strong><span>'+(p.soon?"Click for my details":p.style)+'</span></div>';
+      c.onclick=()=>p.soon?openSoon():openPiece(p);
+      g.appendChild(c);
+      if(p.cycle&&!still){let n=0;const els=c.querySelectorAll(".cyc");timers.push(setInterval(()=>{els[n].classList.remove("on");n=(n+1)%els.length;els[n].classList.add("on")},3000+i*450))}
+    });
+  }
+  const dlg=$("dlg");
+  const stopAuto=()=>{clearInterval(auto);auto=null;$("dPP").textContent="Play slideshow"};
+  const startAuto=()=>{clearInterval(auto);$("dPP").textContent="Pause slideshow";auto=setInterval(()=>show(curP,(curIdx+1)%curP.media.length),3500)};
+  function show(p,i){
+    const m=p.media[i]; curIdx=i; $("dDesc").textContent=m.desc||p.desc||"";
+    $("dStage").innerHTML=tag(m.f,"",p.name+" – "+m.label,"stage");
+    [...$("dThumbs").children].forEach((b,j)=>b.setAttribute("aria-current",String(j===i)));
+  }
+  function openPiece(p){
+    $("dContact").hidden=true;$("dStage").style.display="";$("dThumbs").style.display="";$("dTitle").textContent=p.name;$("dKind").textContent=p.style;{const L=$("dLink");L.hidden=!p.link;if(p.link){L.href=p.link.url;L.textContent=p.link.label+" ↗"}}dlg.style.setProperty("--c",colorOf(p.style));
+    $("dDesc").textContent=p.desc||"";
+    const t=$("dThumbs"); t.innerHTML="";
+    p.media.forEach((m,i)=>{
+      const b=document.createElement("button");
+      b.innerHTML=tag(m.f,"","","thumb")+'<span>'+m.label+'</span>';
+      b.onclick=()=>{stopAuto();show(p,i)};
+      t.appendChild(b);
+    });
+    show(p,0); curP=p; stopAuto(); $("dPP").hidden=!(p.autoplay&&!still); if(p.autoplay&&!still) startAuto();
+    if(!dlg.open) dlg.showModal();
+  }
+  function openSoon(){
+    const C=COMING_SOON; stopAuto();
+    $("dTitle").textContent=C.title||"Coming soon!"; $("dKind").textContent="Contact"; $("dDesc").textContent=C.text||""; $("dLink").hidden=true;
+    dlg.style.setProperty("--c","var(--accent)");
+    $("dStage").style.display="none"; $("dThumbs").style.display="none"; $("dPP").hidden=true;
+    const box=$("dContact"); box.innerHTML="";
+    const rows=(C.contact||[]).filter(r=>r.value);
+    if(!rows.length){const n=document.createElement("p");n.className="soonnote";n.textContent="My details are coming soon, too.";box.appendChild(n)}
+    rows.forEach(r=>{
+      const d=document.createElement("div"); d.className="crow";
+      const l=document.createElement("span"); l.textContent=r.label;
+      let v; if(r.url){v=document.createElement("a");v.href=r.url;v.target="_blank";v.rel="noopener"}else v=document.createElement("strong");
+      v.textContent=r.value; d.append(l,v); box.appendChild(d);
+    });
+    box.hidden=false;
+    if(!dlg.open) dlg.showModal();
+  }
+  $("dClose").onclick=()=>dlg.close();
+  $("dPP").onclick=()=>auto?stopAuto():startAuto();
+  dlg.addEventListener("close",()=>{stopAuto();$("dStage").innerHTML=""});
+  dlg.addEventListener("click",e=>{if(e.target===dlg)dlg.close()});
+  renderFilters(); renderGrid();
+  if(window.ResizeObserver){let tm;new ResizeObserver(()=>{clearTimeout(tm);tm=setTimeout(()=>{if(Math.abs($("grid").clientWidth-lastW)>1)renderGrid()},120)}).observe($("grid"))}
+  const h=location.hash.slice(1), hp=PIECES.find(p=>p.id===h);
+  if(hp) openPiece(hp);
+})();
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+/* Rotating 3D background. Placeholder shape for now: it gets replaced by your own model. */
+(function(){
+  if(!window.THREE) return;
+  try{
+    const cv=document.getElementById("bg");
+    const r=new THREE.WebGLRenderer({canvas:cv,alpha:true,antialias:true});
+    const scene=new THREE.Scene(), cam=new THREE.PerspectiveCamera(35,1,.1,50); cam.position.z=7;
+    const mat=new THREE.MeshBasicMaterial({wireframe:true});
+    const mesh=new THREE.Mesh(new THREE.TorusKnotGeometry(1.5,.45,140,14),mat); scene.add(mesh);
+    const tint=()=>mat.color.set(getComputedStyle(document.documentElement).getPropertyValue("--accent").trim()||"#8fe3c8");
+    const size=()=>{const w=innerWidth,h=innerHeight;r.setPixelRatio(Math.min(devicePixelRatio||1,2));r.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix();mesh.position.x=w>800?2.6:0;mesh.position.y=w>800?0:-1.2};
+    const still=matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const draw=()=>r.render(scene,cam);
+    const tick=()=>{mesh.rotation.y+=.004;mesh.rotation.x+=.0012;draw();requestAnimationFrame(tick)};
+    tint(); size(); addEventListener("resize",()=>{size();draw()});
+    matchMedia("(prefers-color-scheme: dark)").addEventListener("change",()=>{tint();draw()});
+    still?draw():tick();
+  }catch(e){}
+})();
+</script>
+</body>
+</html>
